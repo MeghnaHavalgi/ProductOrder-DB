@@ -1,0 +1,97 @@
+
+
+// Question 1: Open VS Code and connect to MONGODB
+
+// Question 2: Create a database "ProductOrder" and create collections "Product","Inventory","User", and "Order" in it.
+use ("ProductOrder");
+db.createCollection("Product");
+db.createCollection("Inventory");
+db.createCollection("User");
+db.createCollection('Order');
+
+// Question 3: Open MongoDBCompass and navigate to the "ProductOrder" database.
+// i) Add "Product_info.json" file into "Product" collection.
+// ii) Add "Inventory_info.json" file into "Inventory" collection.
+// iii) Add "User_info.json" file into "User" collection.
+// iv) Add "Order_info.json" file into "Order" collection.
+
+// Question 4: Display the first 5 rows of product, inventory, user, and order collection.
+use ('ProductOrder')
+db.Product.find().limit(5) 
+
+use ('ProductOrder')
+db.Inventory.find().limit(5)
+
+use ('ProductOrder')
+db.User.find().limit(5)
+
+use ('ProductOrder')
+db.Order.find().limit(5)
+
+
+// Question 5: Display the Unique Brand and Model names from the Product collection.
+use ('ProductOrder')
+db.Product.distinct('brand'); // to display unique brands
+
+use ('ProductOrder')
+db.Product.distinct('model'); // to display unique models
+
+
+// Question 6: Find the maximum and minimum price of the given products?
+use ('ProductOrder')
+db.Product.aggregate([{$group : { _id: "price", 
+                                max: { $max : "$price" }, 
+                                min: { $min : "$price"}}}]);
+
+
+// Question 7: Display the quantity and last_updated date and time for sku "SNY-11001".
+use ('ProductOrder');
+db.Inventory.find({sku:"SNY-11001"});
+
+
+// Question 8: List down the count of the total number of users whose role is identified as 'Supplier' from User collection
+use ('ProductOrder'); 
+db.User.find({role:{$in:["Supplier"]}}).count();
+
+
+// Question 9: Display 'sku', 'code', 'price', 'brand' and 'warranty' information for the model 'Bravia-X'
+use ('ProductOrder');
+db.Product.find({model:{$in:['Bravia-X']}});
+
+
+// Question 10: Find all the information of Sony products which have an Price greater than 1 lakh
+use ('ProductOrder');    
+db.Product.find({$and:[{brand:"Sony"},{price:{$gt:100000}}]});
+
+
+// Question 11: Find the total no of products by each Brand and sort them in descending order.
+use ('ProductOrder');
+db.Product.aggregate(
+    [{$group:{_id:'$brand',no_of_products:{$sum:1}}},
+    {$sort:{no_of_products: -1}}]);
+
+// Question 12: Find the total no of users by each role, sort them is descending order and save the results in the temporary collection 
+use ('ProductOrder');
+db.User.aggregate(
+    [{$group:{_id:'$role',no_of_users:{$sum:1}}},
+    {$sort:{no_of_products: -1}},
+    {$out:"temp_result"}]);
+
+
+                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
